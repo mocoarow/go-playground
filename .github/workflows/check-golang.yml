@@ -1,0 +1,45 @@
+---
+name: Check Go
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "hello-world/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "hello-world/**"
+permissions: {}
+jobs:
+  golang:
+    permissions:
+      checks: write
+      contents: read
+      pull-requests: write
+    strategy:
+      matrix:
+        workdir:
+          - hello-world
+    name: golang
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: ${{ matrix.workdir }}/go.mod
+
+      - name: golangci-lint
+        uses: reviewdog/action-golangci-lint@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          golangci_lint_flags: --config=../.golangci.yml --timeout=10m
+          tool_name: golangci-lint
+          filter_mode: nofilter
+          fail_level: error
+          workdir: ${{ matrix.workdir }}

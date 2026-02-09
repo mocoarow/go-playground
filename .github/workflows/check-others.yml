@@ -1,0 +1,52 @@
+---
+name: Check Others
+on:
+  pull_request:
+    branches:
+      - main
+permissions: {}
+jobs:
+  others:
+    name: others
+    permissions:
+      checks: write
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: misspell
+        uses: reviewdog/action-misspell@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          locale: US
+          ignore: importas
+          fail_level: error
+
+      - name: yamllint
+        uses: reviewdog/action-yamllint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          yamllint_flags: -c .github/yamllint.yml .
+          fail_level: error
+
+      - name: gitleaks
+        uses: reviewdog/action-gitleaks@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          level: warning
+          fail_level: any
+          gitleaks_flags: -c .github/gitleaks.toml
+
+      - name: markdownlint
+        uses: reviewdog/action-markdownlint@v0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          level: warning
+          fail_level: any
+          markdownlint_flags: "--config .github/markdownlint.yaml ."
