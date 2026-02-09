@@ -1,0 +1,14 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "hello-world_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/mocoarow/go-playground/hello-world",
+    visibility = ["//visibility:private"],
+)
+
+go_binary(
+    name = "hello-world",
+    embed = [":hello-world_lib"],
+    visibility = ["//visibility:public"],
+)

@@ -1,0 +1,78 @@
+---
+version: "2"
+run:
+  go: "1.25"
+  build-tags:
+    - small
+    - medium
+    - large
+linters:
+  enable:
+    - bodyclose
+    - errorlint
+    - exhaustive
+    - forbidigo
+    - forcetypeassert
+    - gocognit
+    - gocyclo
+    - gosec
+    - noctx
+    - testpackage
+    - thelper
+    - unconvert
+    - whitespace
+    - asasalint
+    - dupword
+    - dupl
+    - exptostd
+    - nestif
+    - goconst
+    - tagliatelle
+    - predeclared
+    - importas
+    - revive
+    - goheader
+    - nolintlint
+    - paralleltest
+    - testifylint
+    - spancheck
+    - staticcheck
+    - wrapcheck
+    - canonicalheader
+    - decorder
+    - nilnil
+    - prealloc
+    - mirror
+    - misspell
+    - nilerr
+    - reassign
+    - gocheckcompilerdirectives
+    - makezero
+    - exhaustruct
+    - fatcontext
+    - sloglint
+
+  settings:
+    forbidigo:
+      forbid:
+        - pattern: ^fmt\.Print.*$
+    gocognit:
+      min-complexity: 20
+    gocyclo:
+      min-complexity: 12
+    gosec:
+      excludes:
+        - G115
+    staticcheck:
+      checks:
+        - all
+    sloglint:
+      min-level: "info"
+      no-raw-keys: true
+      no-mixed-args: false
+      kv-only: true
+      no-global: "all"
+formatters:
+  enable:
+    - gofmt
+    - goimports

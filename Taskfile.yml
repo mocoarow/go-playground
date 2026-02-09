@@ -1,0 +1,70 @@
+---
+version: "3"
+
+dotenv: ['.env', '{{.ENV}}/.env', '{{.HOME}}/.env']
+
+vars:
+  GO_PROJECTS:
+    - hello-world
+
+tasks:
+  init:
+    cmds:
+      - go work init
+      - go work use -r .
+
+  gazelle:
+    cmds:
+      - bazelisk run //:gazelle -- -build_tags=small,medium,large
+
+  mod-tidy:
+    cmds:
+      - bazelisk run @rules_go//go -- mod tidy
+
+  check-go-project:
+    cmds:
+      - |
+        cd {{ .GO_PROJECT }}
+        golangci-lint run --config ../.golangci.yml --timeout=5m
+    requires:
+      vars: [GO_PROJECT]
+
+  check:
+    cmds:
+      - for:
+          var: GO_PROJECTS
+        task: check-go-project
+        vars:
+          GO_PROJECT: "{{ .ITEM }}"
+
+  test:
+    cmds:
+      - rm -f ./coverage.lcov
+      - bazelisk test //... --collect_code_coverage=true --test_output=errors --test_timeout=60 --test_size_filters=small,medium --cache_test_results=no
+      - bazelisk coverage //... --combined_report=lcov --test_size_filters=small,medium
+      - |
+        OUTPUT_PATH=$(bazelisk info output_path)
+        cp "${OUTPUT_PATH}/_coverage/_coverage_report.dat" ./coverage.lcov
+    env:
+      APP_ENV: test
+
+  update-mod-project:
+    cmds:
+      - |
+        cd {{ .GO_PROJECT }}
+        GOPROXY=direct go get -u ./...
+        go mod tidy
+    requires:
+      vars: [GO_PROJECT]
+
+  update-mod:
+    cmds:
+      - for:
+          var: GO_PROJECTS
+        task: update-mod-project
+        vars:
+          GO_PROJECT: "{{ .ITEM }}"
+
+  run-hello-world:
+    cmds:
+      - bazelisk run //hello-world:hello-world
