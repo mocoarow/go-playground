@@ -1,0 +1,2 @@
+common --enable_bzlmod
+common --incompatible_strict_action_env

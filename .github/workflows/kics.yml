@@ -1,0 +1,23 @@
+---
+name: Test KICS action PR comment
+on:
+  pull_request:
+permissions: {}
+jobs:
+  test:
+    permissions:
+      checks: write
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: run kics Scan
+        uses: checkmarx/kics-github-action@v2.1.18
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: ./
+          config_path: .github/kics.yml
+          output_path: kics_results/
+          enable_comments: true
