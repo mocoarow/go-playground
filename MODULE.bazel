@@ -6,14 +6,13 @@ go_sdk.download(version = "1.25.4")
 
 # gazelle
 bazel_dep(name = "gazelle", version = "0.47.0", repo_name = "gazelle")
-
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
 
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
 go_deps.from_file(go_work = "//:go.work")
-
 use_repo(
     go_deps,
+    "org_golang_x_sync",
 )
 
 # pkg

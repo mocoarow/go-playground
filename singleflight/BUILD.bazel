@@ -1,0 +1,25 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+load("//bazel:go_test.bzl", "smart_go_test")
+
+go_library(
+    name = "singleflight_lib",
+    srcs = [
+        "fetcher.go",
+        "main.go",
+    ],
+    importpath = "github.com/mocoarow/go-playground/singleflight",
+    visibility = ["//visibility:private"],
+    deps = ["@org_golang_x_sync//singleflight"],
+)
+
+go_binary(
+    name = "singleflight",
+    embed = [":singleflight_lib"],
+    visibility = ["//visibility:public"],
+)
+
+smart_go_test(
+    name = "singleflight_test",
+    srcs = ["main_test.go"],
+    deps = [":singleflight_lib"],
+)
