@@ -6,6 +6,7 @@ dotenv: ['.env', '{{.ENV}}/.env', '{{.HOME}}/.env']
 vars:
   GO_PROJECTS:
     - hello-world
+    - singleflight
 
 tasks:
   init:
@@ -68,3 +69,7 @@ tasks:
   run-hello-world:
     cmds:
       - bazelisk run //hello-world:hello-world
+
+  run-singleflight:
+    cmds:
+      - bazelisk run //singleflight:singleflight
