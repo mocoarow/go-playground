@@ -73,14 +73,14 @@ func (f *DataFetcher) doFetch(_ context.Context, key string) (FetchResult, error
 
 	// Simulate slow external call.
 	// time.Sleep(100 * time.Millisecond)
-	time.Sleep(2 * time.Second)
+	time.Sleep(2 * time.Second) //nolint:mnd
 
 	if key == "error" {
 		return FetchResult{}, fmt.Errorf("simulated fetch error for key %s", key)
 	}
 
 	return FetchResult{
-		Value:     fmt.Sprintf("data-for-%s", key),
+		Value:     "data-for-" + key,
 		FetchedAt: time.Now(),
 	}, nil
 }

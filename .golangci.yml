@@ -8,49 +8,69 @@ run:
     - large
 linters:
   enable:
+    - asasalint
     - bodyclose
+    - canonicalheader
+    - containedctx
+    - decorder
+    - dupl
+    - dupword
+    - durationcheck
+    - errname
     - errorlint
+    - errchkjson
+    - errcheck
     - exhaustive
+    - exhaustruct
+    - exptostd
+    - fatcontext
     - forbidigo
     - forcetypeassert
+    - gocritic
+    - gocheckcompilerdirectives
+    - gochecknoglobals
     - gocognit
+    - goconst
+    - gocritic
     - gocyclo
+    - goheader
     - gosec
+    - iface
+    - importas
+    - intrange
+    - interfacebloat
+    - ireturn
+    - makezero
+    - mirror
+    - misspell
+    - mnd
+    - modernize
+    - musttag
+    - nestif
+    - nilerr
+    - nilnesserr
+    - nilnil
     - noctx
+    - nolintlint
+    - paralleltest
+    - perfsprint
+    - prealloc
+    - predeclared
+    - reassign
+    - revive
+    - rowserrcheck
+    - sloglint
+    - spancheck
+    - sqlclosecheck
+    - staticcheck
+    - tagliatelle
+    - testifylint
     - testpackage
     - thelper
     - unconvert
     - whitespace
-    - asasalint
-    - dupword
-    - dupl
-    - exptostd
-    - nestif
-    - goconst
-    - tagliatelle
-    - predeclared
-    - importas
-    - revive
-    - goheader
-    - nolintlint
-    - paralleltest
-    - testifylint
-    - spancheck
-    - staticcheck
     - wrapcheck
-    - canonicalheader
-    - decorder
-    - nilnil
-    - prealloc
-    - mirror
-    - misspell
-    - nilerr
-    - reassign
-    - gocheckcompilerdirectives
-    - makezero
-    - exhaustruct
-    - fatcontext
-    - sloglint
+    - wsl_v5
 
   settings:
     forbidigo:
@@ -67,11 +87,31 @@ linters:
       checks:
         - all
     sloglint:
-      min-level: "info"
       no-raw-keys: true
       no-mixed-args: false
       kv-only: true
       no-global: "all"
+    wsl_v5:
+      disable:
+        - if
+        - expr
+        - append
+        - range
+        - assign
+        - decl
+        - return
+        - defer
+  exclusions:
+    rules:
+      - path: _test\.go
+        linters:
+          - dupl
+          - wsl_v5
+          - revive
+          - exhaustruct
+          - wrapcheck
+          - goconst
+          - gochecknoglobals
 formatters:
   enable:
     - gofmt
