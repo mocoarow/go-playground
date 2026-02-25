@@ -7,6 +7,8 @@ vars:
   GO_PROJECTS:
     - hello-world
     - singleflight
+    - httpcacheserver
+    - httpcacheclient
 
 tasks:
   init:
@@ -66,6 +68,12 @@ tasks:
         vars:
           GO_PROJECT: "{{ .ITEM }}"
 
+  test-race:
+    cmds:
+      - bazelisk test //... --@rules_go//go/config:race --test_output=errors --test_timeout=60 --test_size_filters=small,medium --cache_test_results=no
+    env:
+      APP_ENV: test
+
   run-hello-world:
     cmds:
       - bazelisk run //hello-world:hello-world
@@ -73,3 +81,11 @@ tasks:
   run-singleflight:
     cmds:
       - bazelisk run //singleflight:singleflight
+
+  run-httpcacheserver:
+    cmds:
+      - bazelisk run //httpcacheserver:httpcacheserver
+
+  run-httpcacheclient:
+    cmds:
+      - bazelisk run //httpcacheclient:httpcacheclient
