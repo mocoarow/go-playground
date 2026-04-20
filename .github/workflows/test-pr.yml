@@ -36,7 +36,7 @@ jobs:
       - run: bazel info
 
       # https://github.com/arduino/setup-task/tree/v2.0.0
-      - uses: arduino/setup-task@60cc3975942e4749b3f83519046f542db3030970
+      - uses: arduino/setup-task@e02ce2d9bd180c4143fcbab05bdb5ac056e100b1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
